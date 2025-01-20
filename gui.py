@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import messagebox
 from genetic_algorithm import GeneticAlgorithm
 from graph import show_graph  # Importar la función de las gráficas
-import math
 
 class GeneticAlgorithmGUI:
     def __init__(self, master):
@@ -76,6 +75,27 @@ class GeneticAlgorithmGUI:
             B = float(self.B_entry.get())
             delta_x = float(self.delta_x_entry.get())
 
+            # Validaciones de los valores ingresados
+            error_message = ""
+            if tam_poblacion_inicial < 1 or type(tam_poblacion_inicial) != int:
+                error_message += "-El valor de la población inicial debe ser un entero positivo\n"
+            if type(tam_poblacion_max) != int:
+                error_message += "-El valor de la población maxima debe ser entero positivo\n"
+            if tam_poblacion_inicial > tam_poblacion_max:
+                error_message += "-El tamaño de la población inicial no puede ser mayor que el tamaño máximo.\n"
+            if A >= B:
+                error_message += "-El valor de A debe ser menor que el valor de B.\n"
+            if not (0 <= p_cruza <= 1):
+                error_message += "-La probabilidad de cruza debe estar entre 0 y 1.\n"
+            if not (0 <= p_mut_ind <= 1):
+                error_message += "-La probabilidad de mutación de individuo debe estar entre 0 y 1.\n"
+            if not (0 <= p_mut_bit <= 1):
+                error_message += "-La probabilidad de mutación de bit debe estar entre 0 y 1.\n"
+
+            if error_message:
+                messagebox.showerror("Error", error_message)
+                return
+
             # Crear el algoritmo genético
             ga = GeneticAlgorithm(
                 tam_poblacion_inicial,
@@ -105,11 +125,3 @@ class GeneticAlgorithmGUI:
 
         except ValueError:
             messagebox.showerror("Error", "Por favor ingrese todos los datos correctamente.")
-
-def main():
-    root = tk.Tk()
-    app = GeneticAlgorithmGUI(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
