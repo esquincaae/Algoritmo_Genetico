@@ -92,19 +92,16 @@ class GeneticAlgorithmGUI:
             # Ejecutar el algoritmo y obtener los resultados
             best_x, best_f_x, fitness_generaciones = ga.run()
 
-            # Calcular la longitud del código binario
-            num_valores = int((B - A) / delta_x)  # Cantidad de valores posibles
-            longitud_codigo = math.ceil(math.log2(num_valores))  # Longitud del código binario
-
-            # Obtener la representación binaria de la mejor solución
-            best_x_binary = bin(int(best_x))[2:].zfill(longitud_codigo)  # Convertir a binario
+            # Calcular la representación binaria correctamente
+            best_i = round((best_x - A) / ga.dx_final)  # Obtener el índice en la escala binaria
+            best_x_binary = bin(best_i)[2:].zfill(ga.bits)  # Convertir a binario con la longitud correcta
 
             # Mostrar los resultados en el área de texto
             self.result_text.delete(1.0, tk.END)  # Limpiar el área de texto
             self.result_text.insert(tk.END, f"Mejor x: {best_x}\nMejor f(x): {best_f_x}\nBits de la mejor solucion: {best_x_binary}")
 
             # Mostrar la gráfica en una nueva ventana
-            show_graph(fitness_generaciones, ga.poblacion, A, B, ga.dx_final, ga.f)
+            show_graph(fitness_generaciones, ga.poblacion, A, B, ga.dx_final, ga.f, best_x)
 
         except ValueError:
             messagebox.showerror("Error", "Por favor ingrese todos los datos correctamente.")
